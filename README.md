@@ -20,7 +20,7 @@ flowchart TD
         I --> J[Mostrar Confirmación]
         C -->|No| K[Informar que no hay espacios]
         K --> L[Esperar que se vaya auto]
-        J --> A
+        J --> Z
         L --> M[Se fue el auto?]
         M --> |No| L
         M --> |Sí| Z
