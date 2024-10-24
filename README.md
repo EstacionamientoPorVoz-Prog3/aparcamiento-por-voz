@@ -1,4 +1,4 @@
-# Estacionamiento por voz e IA
+# Aparcamiento por voz e IA
 
 Para el proyecto se decidió utilizar `python3` y `fastai`.
 
