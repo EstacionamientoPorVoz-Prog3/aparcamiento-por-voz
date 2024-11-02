@@ -1,0 +1,5 @@
+.cache/python
+
+.venv/
+
+estacionamiento/**/*py*cache*/
