@@ -37,7 +37,9 @@ class BaseDatos:
             ]
         )
 
-    def verificar_espacios(self, patente: str, tiempo: Tiempo, techado: bool) -> Optional[Reserva]:
+    def verificar_espacios(
+            self, patente: str, tiempo: Tiempo, techado: bool
+            ) -> Optional[Reserva]:
         # Simula la consulta, si hay espacio le asigna uno y retorna la reserva
         # Si no no retorna nada
         pos = 10 if techado else 1

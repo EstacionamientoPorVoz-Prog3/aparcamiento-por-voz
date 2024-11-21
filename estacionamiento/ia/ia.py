@@ -71,7 +71,8 @@ class IA:
         print("Escuchando...")
 
         frames_grabados = []
-        for _a in range(0, math.ceil(self.RATE / self.CHUNK * self.SEGUNDOS_GRABACION)):
+        for _a in range(0, math.ceil(
+                self.RATE / self.CHUNK * self.SEGUNDOS_GRABACION)):
             data = stream.read(self.CHUNK)
             frames_grabados.append(data)
 
