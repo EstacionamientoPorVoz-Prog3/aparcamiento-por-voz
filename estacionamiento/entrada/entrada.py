@@ -1,5 +1,7 @@
 from typing import Optional
 
+from pyaudio import PyAudio
+
 from estacionamiento.asistente import Asistente
 from estacionamiento.db import BaseDatos, Reserva, Tiempo
 from estacionamiento.ia import IA
@@ -10,24 +12,24 @@ class Entrada:
     Esta clase maneja la obtencion de la informacion mediante voz
     """
 
-    def __init__(self):
+    def __init__(self, audio: PyAudio, id_dispositivo: int):
         self.asistente = Asistente()
         self.db = BaseDatos()
-        self.ia = IA()
+        self.ia = IA(audio, id_dispositivo)
 
     def obtener_patente(self) -> str:
         mensaje = "¿Podría decirme su patente por favor?"
         print(mensaje)
         self.asistente.habla(mensaje)
 
-        return self.ia.procesar_patente("aca_iria_audio")
+        return self.ia.procesar_patente()
 
     def obtener_estadia(self) -> int:
         mensaje = "¿Cuanto tiempo desea estacionar su vehiculo?"
         print(mensaje)
         self.asistente.habla(mensaje)
 
-        return self.ia.procesar_estadia("aca_iria_audio")
+        return self.ia.procesar_estadia()
 
     def verificar_espacios(self, patente: str, estadia: int) -> Optional[Reserva]:
         tiempo = Tiempo()
