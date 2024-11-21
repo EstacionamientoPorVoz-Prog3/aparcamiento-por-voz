@@ -1,5 +1,4 @@
 import math
-import random
 import re
 import wave
 from typing import Optional
@@ -41,6 +40,8 @@ class IA:
         "perfecto",
         "buenisimo",
         "buenisímo",
+        "si si si",
+        "si si",
     ]
     NEGATIVO = [
         "no",
@@ -67,8 +68,9 @@ class IA:
             frames_per_buffer=self.CHUNK,
         )
 
-        frames_grabados = []
+        print("Escuchando...")
 
+        frames_grabados = []
         for _a in range(0, math.ceil(self.RATE / self.CHUNK * self.SEGUNDOS_GRABACION)):
             data = stream.read(self.CHUNK)
             frames_grabados.append(data)
@@ -85,7 +87,9 @@ class IA:
 
         resultado = self.modelo.transcribe(self.NOMBRE_ARCHIVO, language="es")
 
-        return resultado["text"].__str__()
+        resultado_str = resultado["text"].__str__().lower().strip().replace(".", "")
+        print(f"Se entendio {resultado_str}")
+        return resultado_str
 
     def procesar_patente(self) -> str:
         texto_desde_audio = self.recibir_audio_a_str()
@@ -98,7 +102,6 @@ class IA:
         return patente
 
     def extraer_tiempo(self, texto: str):
-        texto = texto.lower()
         texto = texto.replace("una", "1")
         texto = texto.replace("media", "30")
         texto = texto.replace("cuarto", "15")
@@ -137,7 +140,6 @@ class IA:
         return confirmacion
 
     def extraer_confirmacion(self, texto: str) -> Optional[bool]:
-        texto = texto.lower()
         if texto in self.AFIRMATIVO:
             return True
         elif texto in self.NEGATIVO:
@@ -146,6 +148,7 @@ class IA:
             return None
 
     def extraer_patente(self, texto: str):
+        texto = texto.upper()
         texto_limpio = "".join(c for c in texto if c.isalnum())
 
         patrones = {

@@ -7,6 +7,7 @@ from estacionamiento.ia import (
     EstadiaProcesamientoException,
     PatenteProcesamientoException,
 )
+from estacionamiento.ia.ia import ConfirmacionProcesamientoException
 
 # Desactivar __pycache__
 sys.dont_write_bytecode = True
@@ -28,21 +29,36 @@ for i in range(0, numero_dispositivos):
             f'Id dispositivo {i} - {audio.get_device_info_by_host_api_device_index(0, i).get("name")}'
         )
 
-print("-------------------------------------------------------------")
+print("---------------------------------------------------------------------------")
 
-idx = int(input())
+idx = int(input().strip())
 print(f"Se tomara el audio con el dispositivo {idx}")
 
 entrada = Entrada(audio, idx)
 entrada.informar_mensaje("Bienvenido al estacionamiento!")
 
 patente_ok = False
+confirmacion = False
 patente: str = ""
 
 while not patente_ok:
     try:
         patente = entrada.obtener_patente()
         patente_ok = True
+        confirmacion = False
+        while not confirmacion:
+            try:
+                confirmacion = entrada.obtener_confirmacion(patente)
+                if not confirmacion:
+                    entrada.informar_mensaje("Vuelva a indicar su patente por favor")
+                    patente_ok = False
+                else:
+                    entrada.informar_mensaje(f"Patente {patente} confirmada!")
+            except ConfirmacionProcesamientoException:
+                entrada.informar_mensaje(
+                    "No se pudo procesar la confirmacion, intente nuevamente"
+                )
+
     except PatenteProcesamientoException:
         entrada.informar_mensaje("No se pudo procesar la patente, intente nuevamente")
 
@@ -60,6 +76,24 @@ else:
         try:
             estadia = entrada.obtener_estadia()
             estadia_ok = True
+            confirmacion = False
+            while not confirmacion:
+                try:
+                    confirmacion = entrada.obtener_confirmacion(str(estadia))
+                    if not confirmacion:
+                        entrada.informar_mensaje(
+                            "Por favor vuelva a indicar su estadia"
+                        )
+                        estadia_ok = False
+                    else:
+                        entrada.informar_mensaje(
+                            f"Estadia de {estadia} minutos confirmada!"
+                        )
+                except ConfirmacionProcesamientoException:
+                    entrada.informar_mensaje(
+                        "No se pudo procesar la confirmacion, intente nuevamente"
+                    )
+
         except EstadiaProcesamientoException:
             entrada.informar_mensaje(
                 "No se pudo procesar la estadia, intente nuevamente"

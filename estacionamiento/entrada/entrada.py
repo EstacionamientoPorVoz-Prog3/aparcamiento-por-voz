@@ -1,3 +1,4 @@
+import datetime as dt
 from typing import Optional
 
 from pyaudio import PyAudio
@@ -31,9 +32,16 @@ class Entrada:
 
         return self.ia.procesar_estadia()
 
+    def obtener_confirmacion(self, valor: str) -> bool:
+        mensaje = f"Entendí {valor} ¿Es esto correcto?"
+        print(mensaje)
+        self.asistente.habla(mensaje)
+
+        return self.ia.procesar_confirmacion()
+
     def verificar_espacios(self, patente: str, estadia: int) -> Optional[Reserva]:
-        tiempo = Tiempo()
-        tiempo.estadia = estadia
+        fecha = dt.datetime.now()
+        tiempo = Tiempo(fecha=fecha, estadia=estadia)
         return self.db.verificar_espacios(patente, tiempo)
 
     def tiene_reserva(self, patente: str) -> Optional[Reserva]:

@@ -1,6 +1,6 @@
 # Aparcamiento por voz e IA
 
-Para el proyecto se decidió utilizar `python3` y `fastai`.
+Para el proyecto se decidió utilizar `python3`, `pyttsx3` y `whisper`.
 
 ```mermaid
 flowchart TD
@@ -29,8 +29,8 @@ flowchart TD
 ## Estado del proyecto:
 - [X] Primera implementación de estructura.
 - [X] Estructura del proyecto
-- [ ] Captura de audio
-- [ ] Implementacion de IA
+- [X] Captura de audio
+- [X] Implementacion de IA
 - [ ] Simular sensores vehiculo
 
 ## Probrar el proyecto
