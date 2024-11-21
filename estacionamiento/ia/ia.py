@@ -39,22 +39,17 @@ class IA:
         "bueno",
         "joya",
         "dale",
-        "de una",
         "si",
         "sí",
         "perfecto",
         "buenisimo",
         "buenisímo",
-        "si si si",
-        "si si",
     ]
     NEGATIVO = [
         "no",
         "nah",
         "neh",
-        "ni ahi",
-        "ni ahí",
-        "ni loco",
+        "ni",
     ]
 
     def __init__(self, audio: pyaudio.PyAudio, id_dispositivo: int):
@@ -92,7 +87,9 @@ class IA:
 
         resultado = self.modelo.transcribe(self.NOMBRE_ARCHIVO, language="es")
 
-        resultado_str = resultado["text"].__str__().lower().strip().replace(".", "")
+        resultado_str = resultado["text"].__str__().lower().strip()
+        resultado_str = ''.join(
+            c for c in resultado_str if c.isalnum() or c.isspace())
         print(f"Se entendio {resultado_str}")
         return resultado_str
 
@@ -106,8 +103,20 @@ class IA:
 
         return patente
 
+    def isdig(self, car: str) -> bool:
+        return car.isdigit()
+
     def extraer_tiempo(self, texto: str):
         texto = texto.replace("una", "1")
+        texto = texto.replace("uno", "1")
+        texto = texto.replace("dos", "2")
+        texto = texto.replace("tres", "3")
+        texto = texto.replace("cuatro", "4")
+        texto = texto.replace("cinco", "5")
+        texto = texto.replace("seis", "6")
+        texto = texto.replace("siete", "7")
+        texto = texto.replace("ocho", "8")
+        texto = texto.replace("nueve", "9")
         texto = texto.replace("media", "30")
         texto = texto.replace("cuarto", "15")
         palabras = texto.strip().split()
@@ -115,7 +124,8 @@ class IA:
         numeros = []
         for palabra in palabras:
             if palabra[0].isdigit():
-                numeros.append(int(palabra))
+                num = ''.join(filter(self.isdig, palabra))
+                numeros.append(int(num))
         if len(numeros) < 1:
             numeros.append(0)
         if len(numeros) < 2:
@@ -145,12 +155,12 @@ class IA:
         return confirmacion
 
     def extraer_confirmacion(self, texto: str) -> Optional[bool]:
-        if texto in self.AFIRMATIVO:
-            return True
-        elif texto in self.NEGATIVO:
-            return False
-        else:
-            return None
+        for palabra in texto.split():
+            if palabra in self.AFIRMATIVO:
+                return True
+            if palabra in self.NEGATIVO:
+                return False
+        return None
 
     def extraer_patente(self, texto: str):
         texto = texto.upper()
@@ -165,6 +175,6 @@ class IA:
         for _tipo, patron in patrones.items():
             match = re.search(patron, texto_limpio)
             if match:
-                return (True, texto_limpio)
+                return (True, match.group())
 
         return (False, texto_limpio)

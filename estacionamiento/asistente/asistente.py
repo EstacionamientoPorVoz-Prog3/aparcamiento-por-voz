@@ -1,8 +1,4 @@
-import random
-
 import pyttsx3
-
-from estacionamiento.db import BaseDatos
 
 
 class Asistente:
@@ -13,7 +9,9 @@ class Asistente:
         self.motor.setProperty("rate", velocidad)
         self.motor.setProperty("volume", volumen)
 
-        self.voces = self.motor.getProperty("voices")
+        voces = self.motor.getProperty("voices")
+        voz_español = [v for v in voces if 'es' in v.languages][0]
+        self.motor.setProperty('voice', voz_español.id)
 
     def habla(self, mensaje: str):
         self.motor.say(mensaje)

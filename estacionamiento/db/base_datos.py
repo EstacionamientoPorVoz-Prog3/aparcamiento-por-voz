@@ -15,6 +15,7 @@ class Reserva:
     patente: str
     tiempo: Tiempo
     posicion: int
+    techado: bool
 
 
 class BaseDatos:
@@ -27,20 +28,24 @@ class BaseDatos:
 
     def tiene_reserva(self, patente: str) -> Optional[Reserva]:
         # Simula la consulta
+        techado = random.choice([True, False])
+        pos = 10 if techado else 1
         random.choice(
             [
-                Reserva(patente, Tiempo(fecha=datetime.now()), 5),
+                Reserva(patente, Tiempo(fecha=datetime.now()), pos, techado),
                 None,
             ]
         )
 
-    def verificar_espacios(self, patente: str, tiempo: Tiempo) -> Optional[Reserva]:
+    def verificar_espacios(self, patente: str, tiempo: Tiempo, techado: bool) -> Optional[Reserva]:
         # Simula la consulta, si hay espacio le asigna uno y retorna la reserva
         # Si no no retorna nada
-        return random.choice([Reserva(patente, tiempo, 10), None])
+        pos = 10 if techado else 1
+        return random.choice([Reserva(patente, tiempo, pos, techado), None])
 
     def registrar_vehiculo(self, reserva: Reserva):
         # Simula el registro
         print(
-            f"Vehiculo con {reserva.patente} registrado en la {reserva.posicion} durante {reserva.tiempo.estadia} minutos."
+            f"Vehiculo con {reserva.patente} registrado en la posicion {
+                reserva.posicion} durante {reserva.tiempo.estadia} minutos."
         )

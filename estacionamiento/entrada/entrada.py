@@ -20,29 +20,22 @@ class Entrada:
 
     def obtener_patente(self) -> str:
         mensaje = "¿Podría decirme su patente por favor?"
-        print(mensaje)
-        self.asistente.habla(mensaje)
-
+        self.informar_mensaje(mensaje)
         return self.ia.procesar_patente()
 
     def obtener_estadia(self) -> int:
         mensaje = "¿Cuanto tiempo desea estacionar su vehiculo?"
-        print(mensaje)
-        self.asistente.habla(mensaje)
-
+        self.informar_mensaje(mensaje)
         return self.ia.procesar_estadia()
 
-    def obtener_confirmacion(self, valor: str) -> bool:
-        mensaje = f"Entendí {valor} ¿Es esto correcto?"
-        print(mensaje)
-        self.asistente.habla(mensaje)
-
+    def obtener_confirmacion(self, mensaje: str) -> bool:
+        self.informar_mensaje(mensaje)
         return self.ia.procesar_confirmacion()
 
-    def verificar_espacios(self, patente: str, estadia: int) -> Optional[Reserva]:
+    def verificar_espacios(self, patente: str, estadia: int, techado: bool) -> Optional[Reserva]:
         fecha = dt.datetime.now()
         tiempo = Tiempo(fecha=fecha, estadia=estadia)
-        return self.db.verificar_espacios(patente, tiempo)
+        return self.db.verificar_espacios(patente, tiempo, techado)
 
     def tiene_reserva(self, patente: str) -> Optional[Reserva]:
         return self.db.tiene_reserva(patente)
