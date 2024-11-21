@@ -1,10 +1,15 @@
 import math
+import os
 import re
 import wave
 from typing import Optional
 
 import pyaudio
+import torch
 import whisper
+
+torch.backends.cuda.enable_mem_efficient_sdp(True)
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 
 class ProcesamientoException(Exception):
@@ -54,7 +59,7 @@ class IA:
 
     def __init__(self, audio: pyaudio.PyAudio, id_dispositivo: int):
         self.audio = audio
-        self.modelo = whisper.load_model("turbo", device="cpu")
+        self.modelo = whisper.load_model("turbo", device="cuda")
         self.id_dispositivo = id_dispositivo
         pass
 
@@ -111,10 +116,10 @@ class IA:
         for palabra in palabras:
             if palabra[0].isdigit():
                 numeros.append(int(palabra))
-            if len(numeros) < 1:
-                numeros.append(0)
-            if len(numeros) < 2:
-                numeros.append(0)
+        if len(numeros) < 1:
+            numeros.append(0)
+        if len(numeros) < 2:
+            numeros.append(0)
         return (numeros[0], numeros[1])
 
     def procesar_estadia(self) -> int:
