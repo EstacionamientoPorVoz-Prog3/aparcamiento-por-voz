@@ -10,8 +10,9 @@ sys.dont_write_bytecode = True
 device_index = 2
 audio = pyaudio.PyAudio()
 
-print("----------------------"
-      + "Lista de dispositivos de entrada---------------------")
+print(
+    "----------------------" + "Lista de dispositivos de entrada---------------------"
+)
 info = audio.get_host_api_info_by_index(0)
 info_cantidad = info.get("deviceCount")
 numero_dispositivos = int(info_cantidad) if info_cantidad is not None else 0
@@ -22,14 +23,12 @@ for i in range(0, numero_dispositivos):
     )
     if int(canales) > 0:
         print(
-            f'Id dispositivo {
-                i} - {
-                    audio.get_device_info_by_host_api_device_index(
-                        0, i).get("name")}'
+            f'Id dispositivo {i} - {audio.get_device_info_by_host_api_device_index(0, i).get("name")}'
         )
 
-print("--------------------------------------" +
-      "-------------------------------------")
+print(
+    "--------------------------------------" + "-------------------------------------"
+)
 
 idx = int(input().strip())
 print(f"Se tomara el audio con el dispositivo {idx}")

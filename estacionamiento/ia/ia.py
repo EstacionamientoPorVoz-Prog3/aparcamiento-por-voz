@@ -51,9 +51,9 @@ class IA:
 
     def __init__(self, audio: pyaudio.PyAudio, id_dispositivo: int):
         self.audio = audio
-        dispositivo = 'gpu'
+        dispositivo = "gpu"
         if torch.cuda.is_available():
-            dispositivo = 'cuda'
+            dispositivo = "cuda"
             torch.backends.cuda.enable_mem_efficient_sdp(True)
             os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
         self.modelo = whisper.load_model("turbo", device=dispositivo)
@@ -73,8 +73,7 @@ class IA:
         print("Escuchando...")
 
         frames_grabados = []
-        for _a in range(0, math.ceil(
-                self.RATE / self.CHUNK * self.SEGUNDOS_GRABACION)):
+        for _a in range(0, math.ceil(self.RATE / self.CHUNK * self.SEGUNDOS_GRABACION)):
             data = stream.read(self.CHUNK)
             frames_grabados.append(data)
 
@@ -91,8 +90,7 @@ class IA:
         resultado = self.modelo.transcribe(self.NOMBRE_ARCHIVO, language="es")
 
         resultado_str = resultado["text"].__str__().lower().strip()
-        resultado_str = ''.join(
-            c for c in resultado_str if c.isalnum() or c.isspace())
+        resultado_str = "".join(c for c in resultado_str if c.isalnum() or c.isspace())
         print(f"Se entendio {resultado_str}")
         return resultado_str
 
@@ -127,7 +125,7 @@ class IA:
         numeros = []
         for palabra in palabras:
             if palabra[0].isdigit():
-                num = ''.join(filter(self.isdig, palabra))
+                num = "".join(filter(self.isdig, palabra))
                 numeros.append(int(num))
         if len(numeros) < 1:
             numeros.append(0)
@@ -175,7 +173,7 @@ class IA:
             "moto": r"[A-Z]\d{3}[A-Z]{3}",  # A123BCD
         }
 
-        for _tipo, patron in patrones.items():
+        for _, patron in patrones.items():
             match = re.search(patron, texto_limpio)
             if match:
                 return (True, match.group())

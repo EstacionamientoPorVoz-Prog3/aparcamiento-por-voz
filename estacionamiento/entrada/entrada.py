@@ -5,9 +5,8 @@ from pyaudio import PyAudio
 
 from estacionamiento.asistente import Asistente
 from estacionamiento.db import BaseDatos, Reserva, Tiempo
-from estacionamiento.ia import IA
-
 from estacionamiento.ia import (
+    IA,
     EstadiaProcesamientoException,
     PatenteProcesamientoException,
 )
@@ -39,7 +38,7 @@ class Entrada:
         return self.ia.procesar_confirmacion()
 
     def verificar_espacios(
-            self, patente: str, estadia: int, techado: bool
+        self, patente: str, estadia: int, techado: bool
     ) -> Optional[Reserva]:
         fecha = dt.datetime.now()
         tiempo = Tiempo(fecha=fecha, estadia=estadia)
@@ -71,12 +70,12 @@ class Entrada:
                         confirmacion = self.obtener_confirmacion(mensaje)
                         if not confirmacion:
                             self.informar_mensaje(
-                                "Vuelva a indicar su patente por favor")
+                                "Vuelva a indicar su patente por favor"
+                            )
                             patente_ok = False
                             confirmacion = True
                         else:
-                            self.informar_mensaje(
-                                f"Patente {patente} confirmada!")
+                            self.informar_mensaje(f"Patente {patente} confirmada!")
                     except ConfirmacionProcesamientoException:
                         self.informar_mensaje(
                             "No se pudo procesar la confirmacion,"
@@ -84,7 +83,8 @@ class Entrada:
                         )
             except PatenteProcesamientoException:
                 self.informar_mensaje(
-                    "No se pudo procesar la patente, intente nuevamente")
+                    "No se pudo procesar la patente, intente nuevamente"
+                )
         return patente
 
     def adquirir_estadia(self) -> int:
@@ -99,12 +99,11 @@ class Entrada:
                     try:
                         horas = estadia // 60
                         minutos = estadia % 60
-                        horas_s = 'una hora' if horas == 1 else f'{
-                            horas} horas'
-                        minutos_s = 'un minuto' if minutos == 1 else f'{
-                            minutos} minutos'
-                        mensaje = f"Entendí {horas_s} {
-                            minutos_s} ¿Es esto correcto?"
+                        horas_s = "una hora" if horas == 1 else f"{horas} horas"
+                        minutos_s = (
+                            "un minuto" if minutos == 1 else f"{minutos} minutos"
+                        )
+                        mensaje = f"Entendí {horas_s} {minutos_s} ¿Es esto correcto?"
                         confirmacion = self.obtener_confirmacion(mensaje)
                         if not confirmacion:
                             self.informar_mensaje(
@@ -132,7 +131,8 @@ class Entrada:
         while True:
             try:
                 techado = self.obtener_confirmacion(
-                    "¿Prefiere que su estacionamiento sea techado?")
+                    "¿Prefiere que su estacionamiento sea techado?"
+                )
                 break
             except ConfirmacionProcesamientoException:
                 self.informar_mensaje(

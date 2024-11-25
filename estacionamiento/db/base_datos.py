@@ -38,8 +38,8 @@ class BaseDatos:
         )
 
     def verificar_espacios(
-            self, patente: str, tiempo: Tiempo, techado: bool
-            ) -> Optional[Reserva]:
+        self, patente: str, tiempo: Tiempo, techado: bool
+    ) -> Optional[Reserva]:
         # Simula la consulta, si hay espacio le asigna uno y retorna la reserva
         # Si no no retorna nada
         pos = 10 if techado else 1
@@ -48,6 +48,5 @@ class BaseDatos:
     def registrar_vehiculo(self, reserva: Reserva):
         # Simula el registro
         print(
-            f"Vehiculo con {reserva.patente} registrado en la posicion {
-                reserva.posicion} durante {reserva.tiempo.estadia} minutos."
+            f"Vehiculo con {reserva.patente} registrado en la posicion {reserva.posicion} durante {reserva.tiempo.estadia} minutos."
         )
