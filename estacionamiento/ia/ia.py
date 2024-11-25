@@ -8,9 +8,6 @@ import pyaudio
 import torch
 import whisper
 
-torch.backends.cuda.enable_mem_efficient_sdp(True)
-os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
-
 
 class ProcesamientoException(Exception):
     pass
@@ -54,7 +51,12 @@ class IA:
 
     def __init__(self, audio: pyaudio.PyAudio, id_dispositivo: int):
         self.audio = audio
-        self.modelo = whisper.load_model("turbo", device="cuda")
+        dispositivo = 'gpu'
+        if torch.cuda.is_available():
+            dispositivo = 'cuda'
+            torch.backends.cuda.enable_mem_efficient_sdp(True)
+            os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
+        self.modelo = whisper.load_model("turbo", device=dispositivo)
         self.id_dispositivo = id_dispositivo
         pass
 
